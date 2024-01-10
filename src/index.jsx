@@ -1,5 +1,5 @@
+import { createRoot } from 'react-dom/client';
 import React from 'react';
-import ReactDOM from 'react-dom';
 import './index.scss';
 
 const MyFlixApplication = () => {
@@ -11,4 +11,5 @@ const MyFlixApplication = () => {
 };
 
 const container = document.getElementById('root');
-ReactDOM.render(<MyFlixApplication />, container);
+const root = createRoot(container);
+root.render(<MyFlixApplication />);
