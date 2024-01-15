@@ -20,4 +20,8 @@ const MovieView = ({ movie, onBackClick }) => {
   );
 };
 
+<<<<<<< Updated upstream
 export default MovieView;
+=======
+export default MovieView;
+>>>>>>> Stashed changes

@@ -21,4 +21,8 @@ const MovieCard = ({ movie, onMovieClick }) => {
   );
 };
 
+<<<<<<< Updated upstream
 export default MovieCard;
+=======
+export default MovieCard;
+>>>>>>> Stashed changes
