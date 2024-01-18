@@ -1,53 +1,66 @@
-import React from "react";
-import { useState } from "react";
-import { MovieCard } from "../movie-card/movie-card";
-import { MovieView } from "../movie-view/movie-view";
+import React, { useState, useEffect } from "react";
+import { BookCard } from "../book-card/book-card";
+import { BookView } from "../book-view/book-view";
+import PropTypes from "prop-types";
 
-export const MainView = () => {
-  const [movies] = useState([
-    {
-      id: 1,
-      title: "Inception",
-      image: "https://example.com/inception.jpg",
-      director: "Christopher Nolan",
-    },
-    {
-      id: 2,
-      title: "The Dark Knight",
-      image: "https://example.com/darkknight.jpg",
-      director: "Frank Darabont",
-    },
-    {
-      id: 3,
-      title: "Jurassic Park",
-      image: "https://example.com/jurassicpark.jpg",
-      director: "Steven Spielberg",
-    },
-  ]);
+export const MainView = ({ books }) => {
+  const [movies, setMovies] = useState([]);
+  const [localSelectedBook, setLocalSelectedBook] = useState(null);
 
-  const [selectedMovie, setSelectedMovie] = useState(null);
+  useEffect(() => {
+    setMovies([
+      {
+        id: 1,
+        title: "Inception",
+        image: "https://example.com/inception.jpg",
+        director: "Christopher Nolan",
+      },
+      {
+        id: 2,
+        title: "The Dark Knight",
+        image: "https://example.com/darkknight.jpg",
+        director: "Frank Darabont",
+      },
+      {
+        id: 3,
+        title: "Jurassic Park",
+        image: "https://example.com/jurassicpark.jpg",
+        director: "Steven Spielberg",
+      },
+    ]);
 
-  if (selectedMovie) {
+    return () => {
+      // Clean-up function
+    };
+  }, []);
+
+  if (localSelectedBook) {
     return (
-      <MovieView movie={selectedMovie} onBackClick={() => setSelectedMovie(null)} />
+      <BookView book={localSelectedBook} onBackClick={() => setLocalSelectedBook(null)} />
     );
   }
 
-  if (movies.length === 0) {
+  if (books.length === 0) {
     return <div>The list is empty!</div>;
   }
 
   return (
     <div>
       {movies.map((movie) => (
-        <MovieCard
+        <BookCard
           key={movie.id}
-          movie={movie}
-          onMovieClick={(newSelectedMovie) => {
-            setSelectedMovie(newSelectedMovie);
+          book={movie}
+          onBookClick={(newSelectedBook) => {
+            setLocalSelectedBook(newSelectedBook);
           }}
         />
       ))}
     </div>
   );
 };
+
+MainView.propTypes = {
+  books: PropTypes.array.isRequired,
+};
+
+export default MainView;

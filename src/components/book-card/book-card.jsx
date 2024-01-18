@@ -1,7 +1,9 @@
+// Here you import the PropTypes library
 import React from "react";
 import PropTypes from "prop-types";
 
-export const BookCard = ({ book, onBookClick }) => {
+// The BookCard function component
+const BookCard = ({ book, onBookClick }) => {
   return (
     <div
       onClick={() => {
@@ -13,11 +15,13 @@ export const BookCard = ({ book, onBookClick }) => {
   );
 };
 
-// PropTypes validation
 BookCard.propTypes = {
   book: PropTypes.shape({
     title: PropTypes.string.isRequired,
-    // Add other book properties as needed
+    image: PropTypes.string.isRequired,
+    author: PropTypes.string,
   }).isRequired,
   onBookClick: PropTypes.func.isRequired,
 };
+
+export default BookCard;

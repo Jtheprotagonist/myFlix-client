@@ -1,11 +1,13 @@
+// Import React and PropTypes
 import React from "react";
 import PropTypes from "prop-types";
 
-export const BookView = ({ book, onBackClick }) => {
+// Your BookView component
+const BookView = ({ book, onBackClick }) => {
   return (
     <div>
       <div>
-        <img src={book.image} alt={book.title} />
+        <img src={book.image} alt={`Cover for ${book.title}`} />
       </div>
       <div>
         <span>Title: </span>
@@ -20,13 +22,15 @@ export const BookView = ({ book, onBackClick }) => {
   );
 };
 
-// PropTypes validation
+// Add PropTypes for the props used in BookView
 BookView.propTypes = {
   book: PropTypes.shape({
-    title: PropTypes.string.isRequired,
-    author: PropTypes.string.isRequired,
     image: PropTypes.string.isRequired,
-    // Add other book properties as needed
+    title: PropTypes.string.isRequired,
+    author: PropTypes.string,
+    // Add more PropTypes for other properties as needed
   }).isRequired,
   onBackClick: PropTypes.func.isRequired,
 };
+
+export default BookView;
