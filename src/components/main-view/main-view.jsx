@@ -1,6 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { BookCard } from "../book-card/book-card";
-import { BookView } from "../book-view/book-view";
 import PropTypes from "prop-types";
 
 export const MainView = ({ books }) => {
@@ -36,7 +34,11 @@ export const MainView = ({ books }) => {
 
   if (localSelectedBook) {
     return (
-      <BookView book={localSelectedBook} onBackClick={() => setLocalSelectedBook(null)} />
+      <div>
+        {/* Render content related to BookView */}
+        <p>{localSelectedBook.title}</p>
+        <button onClick={() => setLocalSelectedBook(null)}>Back</button>
+      </div>
     );
   }
 
@@ -47,13 +49,17 @@ export const MainView = ({ books }) => {
   return (
     <div>
       {movies.map((movie) => (
-        <BookCard
-          key={movie.id}
-          book={movie}
-          onBookClick={(newSelectedBook) => {
-            setLocalSelectedBook(newSelectedBook);
-          }}
-        />
+        <div key={movie.id}>
+          {/* Render content related to BookCard */}
+          <p>{movie.title}</p>
+          <button
+            onClick={() => {
+              setLocalSelectedBook(movie);
+            }}
+          >
+            View Details
+          </button>
+        </div>
       ))}
     </div>
   );
