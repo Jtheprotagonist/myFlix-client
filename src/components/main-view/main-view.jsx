@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from "react";
-import PropTypes from "prop-types";
 
-export const MainView = ({ books }) => {
+export const MainView = () => {
   const [movies, setMovies] = useState([]);
-  const [localSelectedBook, setLocalSelectedBook] = useState(null);
 
   useEffect(() => {
     setMovies([
@@ -32,41 +30,16 @@ export const MainView = ({ books }) => {
     };
   }, []);
 
-  if (localSelectedBook) {
-    return (
-      <div>
-        {/* Render content related to BookView */}
-        <p>{localSelectedBook.title}</p>
-        <button onClick={() => setLocalSelectedBook(null)}>Back</button>
-      </div>
-    );
-  }
-
-  if (books.length === 0) {
-    return <div>The list is empty!</div>;
-  }
-
   return (
     <div>
       {movies.map((movie) => (
         <div key={movie.id}>
-          {/* Render content related to BookCard */}
+          {/* Render content related to MovieCard */}
           <p>{movie.title}</p>
-          <button
-            onClick={() => {
-              setLocalSelectedBook(movie);
-            }}
-          >
-            View Details
-          </button>
         </div>
       ))}
     </div>
   );
-};
-
-MainView.propTypes = {
-  books: PropTypes.array.isRequired,
 };
 
 export default MainView;
