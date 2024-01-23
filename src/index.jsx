@@ -5,6 +5,7 @@ import MainView from "./components/main-view/main-view";
 
 
 const MyFlixApplication = () => {
+
     return (
         <div className='my-flix'>
             {/* Use the MainView component here */}

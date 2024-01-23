@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from "react";
+import MovieCard from "../movie-card/movie-card";
+import MovieView from "../movie-view/movie-view";
 
 export const MainView = () => {
   const [movies, setMovies] = useState([]);
+  const [selectedMovie, setSelectedMovie] = useState(null); // Move this outside of useEffect
 
   useEffect(() => {
     setMovies([
@@ -24,19 +27,27 @@ export const MainView = () => {
         director: "Steven Spielberg",
       },
     ]);
-
-    return () => {
-      // Clean-up function
-    };
   }, []);
+
+  if (selectedMovie) {
+    return <MovieView movie={selectedMovie} />;
+  }
+
+  if (movies.length === 0) {
+    return <div>The list is empty!</div>;
+  }
 
   return (
     <div>
+      <button
+        onClick={() => {
+          alert("Nice!");
+        }}
+      >
+        Click me!
+      </button>
       {movies.map((movie) => (
-        <div key={movie.id}>
-          {/* Render content related to MovieCard */}
-          <p>{movie.title}</p>
-        </div>
+        <MovieCard key={movie.id} movie={movie} />
       ))}
     </div>
   );
