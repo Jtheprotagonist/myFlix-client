@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import MovieCard from "../movie-card/movie-card";
+import { MovieCard } from "../movie-card/movie-card";
 import MovieView from "../movie-view/movie-view";
 
 export const MainView = () => {
@@ -30,27 +30,23 @@ export const MainView = () => {
   }, []);
 
   if (selectedMovie) {
-    return <MovieView movie={selectedMovie} />;
-  }
+    return <MovieView onBackClick={ ()=> selectedMovie(null)} movie={selectedMovie} />;
+  }  
 
   if (movies.length === 0) {
     return <div>The list is empty!</div>;
   }
 
-  return (
-    <div>
-      <button
-        onClick={() => {
-          alert("Nice!");
-        }}
-      >
-        Click me!
-      </button>
-      {movies.map((movie) => (
-        <MovieCard key={movie.id} movie={movie} />
-      ))}
-    </div>
-  );
+  if (!selectedMovie) {
+    return (
+      <div>
+        {movies.map((movie) => (
+          <MovieCard key={movie.id} movie={movie} selectedMovie={selectedMovie} />
+        ))}
+      </div>
+    );
+  }
+
 };
 
 export default MainView;
