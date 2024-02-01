@@ -7,29 +7,15 @@ export const MainView = () => {
   const [selectedMovie, setSelectedMovie] = useState(null);
 
   useEffect(() => {
-    setMovies([
-      {
-        id: 1,
-        title: "Inception",
-        image: "https://image.tmdb.org/t/p/original/edv5CZvWj09upOsy2Y6IwDhK8bt.jpg",
-        director: "Christopher Nolan",
-        description: "A mind-bending science fiction thriller about dreams within dreams.",
-      },
-      {
-        id: 2,
-        title: "The Dark Knight",
-        image: "https://image.tmdb.org/t/p/original/qJ2tW6WMUDux911r6m7haRef0WH.jpg",
-        director: "Frank Darabont",
-        description: "The caped crusader faces the Joker in this dark and intense superhero film.",
-      },
-      {
-        id: 3,
-        title: "Jurassic Park",
-        image: "https://image.tmdb.org/t/p/original/oU7Oq2kFAAlGqbU4VoAE36g4hoI.jpg",
-        director: "Steven Spielberg",
-        description: "Dinosaurs come to life in this classic adventure film set on a remote island.",
-      },
-    ]);
+    fetch('/movies')
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("Fetched Data:", data);
+        setMovies(data);
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+      });
   }, []);
 
   const handleCardClick = (clickedMovie) => {
