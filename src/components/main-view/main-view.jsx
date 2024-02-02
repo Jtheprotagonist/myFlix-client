@@ -1,16 +1,15 @@
 import React, { useState, useEffect } from "react";
 import { MovieCard } from "../movie-card/movie-card";
 import MovieView from "../movie-view/movie-view";
+import PropTypes from "prop-types";
 
-export const MainView = () => {
-  const [movies, setMovies] = useState([]);
+const MainView = ({ movies }) => {
   const [selectedMovie, setSelectedMovie] = useState(null);
 
   useEffect(() => {
     fetch('/movies')
       .then((response) => response.json())
       .then((data) => {
-        console.log("Fetched Data:", data);
         setMovies(data);
       })
       .catch((error) => {
@@ -23,6 +22,7 @@ export const MainView = () => {
   };
 
   if (selectedMovie) {
+    // Render MovieView with selected movie data
     return <MovieView onBackClick={() => setSelectedMovie(null)} movie={selectedMovie} />;
   }
 
@@ -37,12 +37,27 @@ export const MainView = () => {
           <MovieCard
             key={movie.id}
             movie={movie}
-            onCardClick={handleCardClick} // Pass the function to handle card click
+            onCardClick={handleCardClick}
           />
         ))}
       </div>
     );
   }
+};
+
+// PropTypes validation for MainView
+MainView.propTypes = {
+  movies: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.number.isRequired,
+      title: PropTypes.string.isRequired,
+      imageUrl: PropTypes.string.isRequired,
+      description: PropTypes.string.isRequired,
+      genre: PropTypes.string.isRequired,
+      director: PropTypes.string.isRequired,
+      // Add other movie properties as needed
+    })
+  ).isRequired,
 };
 
 export default MainView;
