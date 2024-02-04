@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { MovieCard } from "../movie-card/movie-card";
 import MovieView from "../movie-view/movie-view";
-import PropTypes from "prop-types";
 
-const MainView = ({ movies }) => {
+const MainView = () => {
+  const [movies, setMovies] = useState([]); // State variable to store movies
   const [selectedMovie, setSelectedMovie] = useState(null);
 
   useEffect(() => {
@@ -22,7 +22,6 @@ const MainView = ({ movies }) => {
   };
 
   if (selectedMovie) {
-    // Render MovieView with selected movie data
     return <MovieView onBackClick={() => setSelectedMovie(null)} movie={selectedMovie} />;
   }
 
@@ -30,34 +29,17 @@ const MainView = ({ movies }) => {
     return <div>The list is empty!</div>;
   }
 
-  if (!selectedMovie) {
-    return (
-      <div>
-        {movies.map((movie) => (
-          <MovieCard
-            key={movie.id}
-            movie={movie}
-            onCardClick={handleCardClick}
-          />
-        ))}
-      </div>
-    );
-  }
-};
-
-// PropTypes validation for MainView
-MainView.propTypes = {
-  movies: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.number.isRequired,
-      title: PropTypes.string.isRequired,
-      imageUrl: PropTypes.string.isRequired,
-      description: PropTypes.string.isRequired,
-      genre: PropTypes.string.isRequired,
-      director: PropTypes.string.isRequired,
-      // Add other movie properties as needed
-    })
-  ).isRequired,
+  return (
+    <div>
+      {movies.map((movie) => (
+        <MovieCard
+          key={movie.id}
+          movie={movie}
+          onCardClick={handleCardClick}
+        />
+      ))}
+    </div>
+  );
 };
 
 export default MainView;
