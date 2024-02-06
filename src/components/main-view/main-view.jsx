@@ -7,7 +7,7 @@ const MainView = () => {
   const [selectedMovie, setSelectedMovie] = useState(null);
 
   useEffect(() => {
-    fetch('/movies')
+    fetch('https://movie-murmer-2015-5d256703e312.herokuapp.com/')
       .then((response) => response.json())
       .then((data) => {
         setMovies(data);
