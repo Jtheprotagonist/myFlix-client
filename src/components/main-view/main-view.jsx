@@ -33,8 +33,8 @@ const MainView = () => {
     <div>
       {movies.map((movie) => (
         <MovieCard
-          key={movie.id}
-          movie={movie}
+          key={movie._id} // Assuming the id property is named "_id", adjust if necessary
+          movie={{...movie, id: movie._id}} // Ensure that the "id" property is included in the movie object
           onCardClick={handleCardClick}
         />
       ))}
