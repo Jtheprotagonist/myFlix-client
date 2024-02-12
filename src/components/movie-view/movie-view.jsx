@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-const MovieView = ({ movie }) => {
+const MovieView = ({ movie, onBackButtonClick }) => {
   console.log("movie.genre:", movie.genre); // Debugging statement
 
   // Determine how to display the genre based on its type
@@ -17,6 +17,7 @@ const MovieView = ({ movie }) => {
       <h1>{movie.title}</h1>
       <p>Genre: {genreName}</p>
       {/* Render other movie details */}
+      <button onClick={onBackButtonClick}>Back</button> {/* Back button */}
     </div>
   );
 };
@@ -33,7 +34,8 @@ MovieView.propTypes = {
       })
     ]).isRequired,
     // Add other movie properties as needed
-  }).isRequired
+  }).isRequired,
+  onBackButtonClick: PropTypes.func.isRequired // Function to handle back button click
 };
 
 export default MovieView;

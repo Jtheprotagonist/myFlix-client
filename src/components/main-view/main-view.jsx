@@ -21,8 +21,12 @@ const MainView = () => {
     setSelectedMovie(clickedMovie);
   };
 
+  const handleBackButtonClick = () => {
+    setSelectedMovie(null);
+  };
+
   if (selectedMovie) {
-    return <MovieView onBackClick={() => setSelectedMovie(null)} movie={selectedMovie} />;
+    return <MovieView onBackButtonClick={handleBackButtonClick} movie={selectedMovie} />;
   }
 
   if (movies.length === 0) {
