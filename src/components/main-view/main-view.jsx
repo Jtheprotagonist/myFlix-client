@@ -7,16 +7,23 @@ const MainView = () => {
   const [selectedMovie, setSelectedMovie] = useState(null);
 
   useEffect(() => {
-    fetch('https://movie-murmer-2015-5d256703e312.herokuapp.com/movies')
-      .then((response) => response.json())
-      .then((data) => {
-        console.log('Data received:', data); // Log the data received from the server
-        setMovies(data);
-      })
-      .catch((error) => {
-        console.error("Error fetching data:", error);
-      });
-  }, []);
+  fetch('https://movie-murmer-2015-5d256703e312.herokuapp.com/movies')
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error('Unauthorized');
+      }
+      return response.json();
+    })
+    .then((data) => {
+      console.log('Data received:', data);
+      setMovies(data);
+    })
+    .catch((error) => {
+      console.error("Error fetching data:", error);
+      // Handle the error, e.g., display a message to the user
+    });
+}, []);
+
   
 
   const handleCardClick = (clickedMovie) => {
