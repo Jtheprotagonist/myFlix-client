@@ -10,12 +10,14 @@ const MainView = () => {
     fetch('https://movie-murmer-2015-5d256703e312.herokuapp.com/movies')
       .then((response) => response.json())
       .then((data) => {
+        console.log('Data received:', data); // Log the data received from the server
         setMovies(data);
       })
       .catch((error) => {
         console.error("Error fetching data:", error);
       });
   }, []);
+  
 
   const handleCardClick = (clickedMovie) => {
     setSelectedMovie(clickedMovie);
