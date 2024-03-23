@@ -2,11 +2,13 @@ import React, { useState, useEffect } from "react";
 import { MovieCard } from "../movie-card/movie-card";
 import MovieView from "../movie-view/movie-view";
 import SignupView from "../signup-view/signup-view";
+import LoginView from "../login-view/login-view"; // Import LoginView component
 
 const MainView = () => {
   const [movies, setMovies] = useState([]); // State variable to store movies
   const [selectedMovie, setSelectedMovie] = useState(null);
   const [token, setToken] = useState(null);
+  const [user, setUser] = useState(null); // State variable to store user
 
   useEffect(() => {
     fetch('https://movie-murmer-2015-5d256703e312.herokuapp.com/movies')
