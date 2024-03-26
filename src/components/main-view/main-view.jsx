@@ -9,8 +9,10 @@ const MainView = () => {
   const [selectedMovie, setSelectedMovie] = useState(null);
   const [token, setToken] = useState(null);
   const [user, setUser] = useState(null); // State variable to store user
+  const [isLoading, setIsLoading] = useState(true); // State variable for loading state
 
   useEffect(() => {
+    console.log("Fetching movies...");
     fetch('https://movie-murmer-2015-5d256703e312.herokuapp.com/movies')
       .then((response) => {
         if (!response.ok) {
@@ -19,14 +21,17 @@ const MainView = () => {
         return response.json();
       })
       .then((data) => {
-        console.log('Data received:', data);
+        console.log("Movies fetched successfully:", data);
         setMovies(data);
+        setIsLoading(false); // Set loading state to false after fetching movies
       })
       .catch((error) => {
         console.error("Error fetching data:", error);
+        setIsLoading(false); // Set loading state to false if there's an error
         // Handle the error, e.g., display a message to the user
       });
   }, []);
+  
 
   const handleLogout = () => {
     // Perform logout logic here
@@ -42,14 +47,32 @@ const MainView = () => {
     setSelectedMovie(null);
   };
 
-  if (selectedMovie) {
-    return <MovieView onBackButtonClick={handleBackButtonClick} movie={selectedMovie} />;
+  console.log("Rendering MainView component with movies:", movies);
+  
+  // Render loading message if movies are still being fetched
+  if (isLoading) {
+    return <div>Loading...</div>;
   }
 
-  if (movies.length === 0) {
-    return <div>The list is empty!</div>;
+  // Render movie cards if movies are available
+  if (movies.length > 0) {
+    return (
+      <div>
+        {/* Logout button */}
+        <button onClick={() => { setUser(null); setToken(null); localStorage.clear(); }}>Logout</button>
+  
+        {movies.map((movie) => (
+          <MovieCard
+            key={movie._id} // Assuming the id property is named "_id", adjust if necessary
+            movie={{...movie, id: movie._id}} // Ensure that the "id" property is included in the movie object
+            onCardClick={handleCardClick}
+          />
+        ))}
+      </div>
+    );
   }
 
+  // Render login or signup view if user is not logged in
   if (!user) {
     return (
       <>
@@ -63,20 +86,8 @@ const MainView = () => {
     );
   }
 
-  return (
-    <div>
-      {/* Logout button */}
-      <button onClick={() => { setUser(null); setToken(null); localStorage.clear(); }}>Logout</button>
-
-      {movies.map((movie) => (
-        <MovieCard
-          key={movie._id} // Assuming the id property is named "_id", adjust if necessary
-          movie={{...movie, id: movie._id}} // Ensure that the "id" property is included in the movie object
-          onCardClick={handleCardClick}
-        />
-      ))}
-    </div>
-  );
+  // If none of the above conditions are met, render default message
+  return <div>The list is empty!</div>;
 };
 
 export default MainView;
