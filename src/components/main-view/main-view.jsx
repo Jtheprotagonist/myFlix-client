@@ -12,7 +12,6 @@ const MainView = () => {
   const [isLoading, setIsLoading] = useState(true); // State variable for loading state
 
   useEffect(() => {
-    console.log("Fetching movies...");
     fetch('https://movie-murmer-2015-5d256703e312.herokuapp.com/movies')
       .then((response) => {
         if (!response.ok) {
@@ -21,12 +20,10 @@ const MainView = () => {
         return response.json();
       })
       .then((data) => {
-        console.log("Movies fetched successfully:", data);
         setMovies(data);
         setIsLoading(false); // Set loading state to false after fetching movies
       })
       .catch((error) => {
-        console.error("Error fetching data:", error);
         setIsLoading(false); // Set loading state to false if there's an error
         // Handle the error, e.g., display a message to the user
       });
@@ -35,7 +32,6 @@ const MainView = () => {
 
   const handleLogout = () => {
     // Perform logout logic here
-    console.log("Logout clicked");
     // Example: Clear authentication token, reset user session, etc.
   };
 
@@ -46,8 +42,6 @@ const MainView = () => {
   const handleBackButtonClick = () => {
     setSelectedMovie(null);
   };
-
-  console.log("Rendering MainView component with movies:", movies);
   
   // Render loading message if movies are still being fetched
   if (isLoading) {
