@@ -42,6 +42,10 @@ const MainView = () => {
   const handleBackButtonClick = () => {
     setSelectedMovie(null);
   };
+
+  if (selectedMovie) {
+    return <MovieView onBackButtonClick={handleBackButtonClick} movie={selectedMovie} />;
+  }
   
   // Render loading message if movies are still being fetched
   if (isLoading) {
