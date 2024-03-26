@@ -28,7 +28,6 @@ const MainView = () => {
         // Handle the error, e.g., display a message to the user
       });
   }, []);
-  
 
   const handleLogout = () => {
     // Perform logout logic here
@@ -46,7 +45,7 @@ const MainView = () => {
   if (selectedMovie) {
     return <MovieView onBackButtonClick={handleBackButtonClick} movie={selectedMovie} />;
   }
-  
+
   // Render loading message if movies are still being fetched
   if (isLoading) {
     return <div>Loading...</div>;
