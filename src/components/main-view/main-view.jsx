@@ -11,6 +11,7 @@ const MainView = () => {
   const [user, setUser] = useState(null); // State variable to store user
   const [isLoading, setIsLoading] = useState(true); // State variable for loading state
   const [showSignup, setShowSignup] = useState(true); // State variable to control signup view visibility
+  const [isLoggedIn, setIsLoggedIn] = useState(false); // State variable to track authentication status
 
   useEffect(() => {
     fetch('https://movie-murmer-2015-5d256703e312.herokuapp.com/movies')
@@ -33,6 +34,10 @@ const MainView = () => {
   const handleLogout = () => {
     // Perform logout logic here
     // Example: Clear authentication token, reset user session, etc.
+    setUser(null);
+    setToken(null);
+    localStorage.clear();
+    setIsLoggedIn(false); // Update authentication status
   };
 
   const handleCardClick = (clickedMovie) => {
@@ -43,26 +48,31 @@ const MainView = () => {
     setSelectedMovie(null);
   };
 
+  const handleLoginSuccess = () => {
+    setIsLoggedIn(true);
+  };
+
+  if (!user) {
+    return <LoginView />;
+  }
+
   if (selectedMovie) {
     return <MovieView onBackButtonClick={handleBackButtonClick} movie={selectedMovie} />;
   }
 
-  // Render loading message if movies are still being fetched
   if (isLoading) {
     return <div>Loading...</div>;
   }
 
-  // Render movie cards if movies are available
-  if (movies.length > 0) {
+  if (movies.length > 0 && isLoggedIn) {
     return (
       <div>
-        {/* Logout button */}
-        <button onClick={() => { setUser(null); setToken(null); localStorage.clear(); }}>Logout</button>
+        <button onClick={handleLogout}>Logout</button>
   
         {movies.map((movie) => (
           <MovieCard
-            key={movie._id} // Assuming the id property is named "_id", adjust if necessary
-            movie={{...movie, id: movie._id}} // Ensure that the "id" property is included in the movie object
+            key={movie._id}
+            movie={{...movie, id: movie._id}}
             onCardClick={handleCardClick}
           />
         ))}
@@ -70,11 +80,13 @@ const MainView = () => {
     );
   }
 
-  // Render signup and login views before showing the list of movies
   return (
     <div>
-      {showSignup && <SignupView onSignupSuccess={() => setShowSignup(false)} />}
-      <LoginView />
+      {showSignup ? (
+        <SignupView onSignupSuccess={() => setShowSignup(false)} />
+      ) : (
+        <LoginView onLoginSuccess={handleLoginSuccess} />
+      )}
     </div>
   );
 };

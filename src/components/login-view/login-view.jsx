@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-export const LoginView = () => {
+export const LoginView = ({ onLoginSuccess }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -27,8 +27,8 @@ export const LoginView = () => {
         throw new Error(errorData.msg || "Login failed");
       }
 
-      // Redirect to the "/movies" endpoint upon successful login
-      window.location.href = "/movies";
+      // Call the onLoginSuccess callback upon successful login
+      onLoginSuccess();
     } catch (error) {
       setError(error.message || "Login failed");
     }
