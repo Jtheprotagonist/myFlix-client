@@ -10,6 +10,7 @@ const MainView = () => {
   const [token, setToken] = useState(null);
   const [user, setUser] = useState(null); // State variable to store user
   const [isLoading, setIsLoading] = useState(true); // State variable for loading state
+  const [showSignup, setShowSignup] = useState(true); // State variable to control signup view visibility
 
   useEffect(() => {
     fetch('https://movie-murmer-2015-5d256703e312.herokuapp.com/movies')
@@ -69,22 +70,13 @@ const MainView = () => {
     );
   }
 
-  // Render login or signup view if user is not logged in
-  if (!user) {
-    return (
-      <>
-        <LoginView onLoggedIn={(user, token) => {
-          setUser(user);
-          setToken(token);
-        }} />
-        or
-        <SignupView />
-      </>
-    );
-  }
-
-  // If none of the above conditions are met, render default message
-  return <div>The list is empty!</div>;
+  // Render signup and login views before showing the list of movies
+  return (
+    <div>
+      <SignupView onSignupSuccess={() => setShowSignup(false)} />
+      <LoginView />
+    </div>
+  );
 };
 
 export default MainView;

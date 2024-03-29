@@ -1,66 +1,65 @@
-import React, { useState } from "react"; // Import React along with useState
+import React, { useState } from "react";
 
-export const LoginView = ({ onLoggedIn }) => {
+export const LoginView = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
 
-  const handleSubmit = (event) => {
-    // this prevents the default behavior of the form which is to reload the entire page
+  const handleSubmit = async (event) => {
     event.preventDefault();
 
     const data = {
-      Username: username,
-      Password: password
+      username: username,
+      password: password
     };
 
-    fetch("YOUR_API_URL/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(data)
-    })
-    .then((response) => response.json())
-    .then((data) => {
-      console.log("Login response: ", data);
-      if (data.user && data.token) {
-        // Store user object and token in localStorage
-        localStorage.setItem("user", JSON.stringify(data.user));
-        localStorage.setItem("token", data.token);
-        
-        // Call the onLoggedIn callback with user object and token
-        onLoggedIn(data.user, data.token);
-      } else {
-        alert("No such user");
+    try {
+      const response = await fetch("/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(data)
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.msg || "Login failed");
       }
-    })
-    .catch((e) => {
-      alert("Something went wrong");
-    });
+
+      // Redirect to the "/movies" endpoint upon successful login
+      window.location.href = "/movies";
+    } catch (error) {
+      setError(error.message || "Login failed");
+    }
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <label>
-        Username:
-        <input
-          type="text"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-          required
-        />
-      </label>
-      <label>
-        Password:
-        <input
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
-      </label>
-      <button type="submit">Submit</button>
-    </form>
+    <div>
+      <h2>Login</h2>
+      {error && <div>{error}</div>}
+      <form onSubmit={handleSubmit}>
+        <label>
+          Username:
+          <input
+            type="text"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            required
+          />
+        </label>
+        <label>
+          Password:
+          <input
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+        </label>
+        <button type="submit">Submit</button>
+      </form>
+    </div>
   );
 };
 
