@@ -73,7 +73,7 @@ const MainView = () => {
   // Render signup and login views before showing the list of movies
   return (
     <div>
-      <SignupView onSignupSuccess={() => setShowSignup(false)} />
+      {showSignup && <SignupView onSignupSuccess={() => setShowSignup(false)} />}
       <LoginView />
     </div>
   );
