@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { MovieCard } from "../movie-card/movie-card";
 import MovieView from "../movie-view/movie-view";
-import SignupView from "../signup-view/signup-view";
+import { SignupView } from "../signup-view/signup-view";
 import LoginView from "../login-view/login-view"; // Import LoginView component
 
 const MainView = () => {
@@ -53,8 +53,18 @@ const MainView = () => {
   };
 
   if (!user) {
-    return <LoginView />;
+    return (
+      <>
+        <LoginView onLoggedIn={(user, token) => {
+          setUser(user);
+          setToken(token);
+        }} />
+        or
+        <SignupView />
+      </>
+    );
   }
+  
 
   if (selectedMovie) {
     return <MovieView onBackButtonClick={handleBackButtonClick} movie={selectedMovie} />;
