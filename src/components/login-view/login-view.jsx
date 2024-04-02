@@ -14,7 +14,7 @@ export const LoginView = ({ onLoginSuccess }) => {
     };
 
     try {
-      const response = await fetch("/login", {
+      const response = await fetch('https://movie-murmer-2015-5d256703e312.herokuapp.com/login', {
         method: "POST",
         headers: {
           "Content-Type": "application/json"

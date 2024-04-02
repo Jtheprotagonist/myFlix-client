@@ -16,12 +16,12 @@ export const SignupView = () => {
       Birthday: birthday
     };
 
-    fetch("SIGNUP_URL", {
+    fetch('https://movie-murmer-2015-5d256703e312.herokuapp.com/users', {
       method: "POST",
       body: JSON.stringify(data),
       headers: {
         "Content-Type": "application/json"
-      }
+      }    
     }).then((response) => {
       if (response.ok) {
         alert("Signup successful");
