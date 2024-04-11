@@ -14,7 +14,7 @@ const MainView = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false); // State variable to track authentication status
 
   useEffect(() => {
-    fetch('https://movie-murmer-2015-5d256703e312.herokuapp.com/movies')
+    fetch('https://movie-murmur-66745-98757f57b964.herokuapp.com/movies')
       .then((response) => {
         if (!response.ok) {
           throw new Error('Unauthorized');
