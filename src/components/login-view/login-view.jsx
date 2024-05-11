@@ -1,66 +1,59 @@
-import React, { useState } from "react";
+import { useState } from "react";
 
-export const LoginView = ({ onLoginSuccess }) => {
+export const LoginView = ({ onLoggedIn }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
 
-  const handleSubmit = async (event) => {
+  const handleSubmit = (event) => {
+    // this prevents the default behavior of the form which is to reload the entire page
     event.preventDefault();
 
     const data = {
-      username: username,
-      password: password
+      access: username,
+      secret: password
     };
 
-    try {
-      const response = await fetch('https://movie-murmer-2015-5d256703e312.herokuapp.com/login', {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify(data)
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.msg || "Login failed");
+    fetch('https://movie-murmer-2015-5d256703e312.herokuapp.com/login', {
+      method: "POST",
+      body: JSON.stringify(data)
+    })
+    .then((response) => response.json())
+    .then((data) => {
+      console.log("Login response: ", data);
+      if (data.user) {
+        localStorage.setItem("user", JSON.stringify(data.user));
+        localStorage.setItem("token", data.token);
+        onLoggedIn(data.user, data.token);
+      } else {
+        alert("No such user");
       }
-
-      // Call the onLoginSuccess callback upon successful login
-      onLoginSuccess();
-    } catch (error) {
-      setError(error.message || "Login failed");
-    }
+    })
+    .catch((e) => {
+      alert("Something went wrong");
+    });
   };
 
   return (
-    <div>
-      <h2>Login</h2>
-      {error && <div>{error}</div>}
-      <form onSubmit={handleSubmit}>
-        <label>
-          Username:
-          <input
-            type="text"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            required
-          />
-        </label>
-        <label>
-          Password:
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-        </label>
-        <button type="submit">Submit</button>
-      </form>
-    </div>
+    <form onSubmit={handleSubmit}>
+      <label>
+        Username:
+        <input
+          type="text"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+          required
+        />
+      </label>
+      <label>
+        Password:
+        <input
+          type="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          required
+        />
+      </label>
+      <button type="submit">Submit</button>
+    </form>
   );
 };
-
-export default LoginView;

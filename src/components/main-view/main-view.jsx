@@ -1,56 +1,41 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { MovieCard } from "../movie-card/movie-card";
-import MovieView from "../movie-view/movie-view";
-import { SignupView } from "../signup-view/signup-view";
-import LoginView from "../login-view/login-view"; // Import LoginView component
+import { MovieView } from "../movie-view/movie-view";
+import { LoginView } from "../login-view/login-view";
 
-const MainView = () => {
-  const [movies, setMovies] = useState([]); // State variable to store movies
+export const MainView = () => {
+  const storedUser = JSON.parse(localStorage.getItem("user"));
+  const storedToken = localStorage.getItem("token");
+  const [user, setUser] = useState(storedUser ? storedUser : null);
+  const [token, setToken] = useState(storedToken ? storedToken : null);
+  const [movies, setMovies] = useState([]);
   const [selectedMovie, setSelectedMovie] = useState(null);
-  const [token, setToken] = useState(null);
-  const [user, setUser] = useState(null); // State variable to store user
-  const [isLoading, setIsLoading] = useState(true); // State variable for loading state
-  const [showSignup, setShowSignup] = useState(true); // State variable to control signup view visibility
-  const [isLoggedIn, setIsLoggedIn] = useState(false); // State variable to track authentication status
 
   useEffect(() => {
-    fetch('https://movie-murmur-66745-98757f57b964.herokuapp.com/movies')
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error('Unauthorized');
-        }
-        return response.json();
-      })
+    if (!token) {
+      return;
+    }
+
+    fetch("https://movie-murmer-2015-5d256703e312.herokuapp.com/login", {
+      headers: { Authorization: `Bearer ${token}` },
+    })
+      .then((response) => response.json())
       .then((data) => {
-        setMovies(data);
-        setIsLoading(false); // Set loading state to false after fetching movies
-      })
-      .catch((error) => {
-        setIsLoading(false); // Set loading state to false if there's an error
-        // Handle the error, e.g., display a message to the user
+        console.log("Movies data: ", data);
+        const moviesFromApi = data.docs.map((doc) => {
+          return {
+            id: movie._id,
+            image: movie.ImgPath,
+            title: movie.Title,
+            genre: movie.Genre,
+            description: movie.Description,
+            director: movie.Director,
+          };
+        });
+
+        setMovies(moviesFromApi);
       });
   }, []);
-
-  const handleLogout = () => {
-    // Perform logout logic here
-    // Example: Clear authentication token, reset user session, etc.
-    setUser(null);
-    setToken(null);
-    localStorage.clear();
-    setIsLoggedIn(false); // Update authentication status
-  };
-
-  const handleCardClick = (clickedMovie) => {
-    setSelectedMovie(clickedMovie);
-  };
-
-  const handleBackButtonClick = () => {
-    setSelectedMovie(null);
-  };
-
-  const handleLoginSuccess = () => {
-    setIsLoggedIn(true);
-  };
 
   if (!user) {
     return (
@@ -64,41 +49,64 @@ const MainView = () => {
       </>
     );
   }
-  
 
   if (selectedMovie) {
-    return <MovieView onBackButtonClick={handleBackButtonClick} movie={selectedMovie} />;
-  }
-
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
-
-  if (movies.length > 0 && isLoggedIn) {
     return (
-      <div>
-        <button onClick={handleLogout}>Logout</button>
-  
-        {movies.map((movie) => (
-          <MovieCard
-            key={movie._id}
-            movie={{...movie, id: movie._id}}
-            onCardClick={handleCardClick}
-          />
-        ))}
-      </div>
+      <>
+        <button
+          onClick={() => {
+            setUser(null);
+            setToken(null); // Nullify token on logout
+            localStorage.clear(); // Clear localStorage on logout
+          }}
+        >
+          Logout
+        </button>
+        <MovieView
+          movie={selectedMovie}
+          onBackClick={() => setSelectedMovie(null)}
+        />
+      </>
+    );
+  }
+
+  if (movies.length === 0) {
+    return (
+      <>
+        <button
+          onClick={() => {
+            setUser(null);
+            setToken(null); // Nullify token on logout
+            localStorage.clear(); // Clear localStorage on logout
+          }}
+        >
+          Logout
+        </button>
+        <div>The list is empty!</div>
+      </>
     );
   }
 
   return (
     <div>
-      {showSignup ? (
-        <SignupView onSignupSuccess={() => setShowSignup(false)} />
-      ) : (
-        <LoginView onLoginSuccess={handleLoginSuccess} />
-      )}
+      <button
+        onClick={() => {
+          setUser(null);
+          setToken(null); // Nullify token on logout
+          localStorage.clear(); // Clear localStorage on logout
+        }}
+      >
+        Logout
+      </button>
+      {movies.map((book) => (
+        <MovieCard
+          key={movie.id}
+          movie={movie}
+          onMovieClick={(newSelectedMovie) => {
+            setSelectedMovie(newSelectedMovie);
+          }}
+        />
+      ))}
     </div>
   );
 };
-
-export default MainView;
